@@ -18,7 +18,10 @@ public class Book {
     
 @Id
 private int id;
-private String name;
-private double price;
+private String fname;
+private String lname;
+private String email;
+private String major;
+
     
 }
