@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "books")
+@Document(collection = "Student_List")
 public class Book {
 
     @Transient
@@ -18,8 +18,8 @@ public class Book {
     
 @Id
 private int id;
-private String fname;
-private String lname;
+private String firstName;
+private String lastName;
 private String email;
 private String major;
 
