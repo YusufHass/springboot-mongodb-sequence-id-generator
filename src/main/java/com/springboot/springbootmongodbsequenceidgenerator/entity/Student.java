@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "Student_List")
-public class Book {
+public class Student {
 
     @Transient
     public static final String SEQUENCE_NAME= "user_sequence";

@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springboot.springbootmongodbsequenceidgenerator.entity.Book;
+import com.springboot.springbootmongodbsequenceidgenerator.entity.Student;
 import com.springboot.springbootmongodbsequenceidgenerator.exception.NotFoundException;
-import com.springboot.springbootmongodbsequenceidgenerator.repository.BookRepository;
+import com.springboot.springbootmongodbsequenceidgenerator.repository.StudentRepository;
+import com.springboot.springbootmongodbsequenceidgenerator.repository.StudentRepository;
 import com.springboot.springbootmongodbsequenceidgenerator.service.SequenceGenerator;
 
 @SpringBootApplication
@@ -52,42 +53,52 @@ import com.springboot.springbootmongodbsequenceidgenerator.service.SequenceGener
 public class SpringbootMongodbSequenceIdGeneratorApplication {
 
 	@Autowired
-	private BookRepository bookRepository;
+	private StudentRepository studentRepository;
 	@Autowired
 	private SequenceGenerator sequenceGenerator;
-
+//posting file to the database
 	@PostMapping("/students")
-	public Book save(@RequestBody Book book) {
+	public Student save(@RequestBody Student student) {
 		// to generate the sequence
 
-		book.setId(sequenceGenerator.getSequenceNumber(Book.SEQUENCE_NAME));
-		return bookRepository.save(book);
+		student.setId(sequenceGenerator.getSequenceNumber(Student.SEQUENCE_NAME));
+		return studentRepository.save(student);
 
 	}
-
+//getting the student data from the database
 	@GetMapping("/students")
-	public List<Book> getBooks() {
+	public List<Student> getStudents() {
 
-		return bookRepository.findAll();
+		return studentRepository.findAll();
 	}
 
-	// deleting student list
-	// @RequestMapping("/books/{id}")
+	// deleting student list from the database
+		// @RequestMapping("/student/{id}")
 	@RequestMapping(value = "/students/{id}", method = {RequestMethod.DELETE})
 	public ResponseEntity<HttpStatus> deleteStudent(@PathVariable int id) {
-		Book students = bookRepository.findById(id)
+		Student students = studentRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Students Not Exist" + id));
-		bookRepository.delete(students);
+		studentRepository.delete(students);
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	// @PostMapping("books/{id}")
-	// // @RequestMapping(value = "/books/{id}", method = {RequestMethod.DELETE})
-	// // @RequestMapping(value = "/books/{id}")
+	// @PostMapping("student/{id}")
+	// // @RequestMapping(value = "/student/{id}", method = {RequestMethod.DELETE})
+	// // @RequestMapping(value = "/student/{id}")
 	// public void deleteStudent (@PathVariable int id){
-	// 	bookRepository.deleteById(id);
+	// 	studentRepository.deleteById(id);
 	// }
+
+	//searching student data based on student id
+	// @GetMapping("{id}")
+	@RequestMapping(value = "/students/{id}", method = {RequestMethod.GET})
+	public ResponseEntity<Student>getStudentById(@PathVariable int id){
+		Student students = studentRepository.findById(id).orElseThrow(()-> new NotFoundException("Student not exist with id"+id));
+		return ResponseEntity.ok(students);
+	}
+
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringbootMongodbSequenceIdGeneratorApplication.class, args);
